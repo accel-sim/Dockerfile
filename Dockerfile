@@ -12,7 +12,7 @@ ENV GPUAPPS_ROOT /accel-sim/gpu-app-collection
 RUN apt-get update \
 && apt-get install -y wget build-essential xutils-dev bison zlib1g-dev flex \
       libglu1-mesa-dev git g++ libssl-dev libxml2-dev libboost-all-dev git g++ \
-      libxml2-dev vim python-setuptools python3-pip \
+      libxml2-dev vim python-setuptools python3-pip cmake \
 && apt-get clean \
 && pip3 install pyyaml plotly psutil \
 && wget https://developer.download.nvidia.com/compute/cuda/11.7.0/local_installers/cuda_11.7.0_515.43.04_linux.run \
