@@ -1,12 +1,12 @@
-FROM ubuntu:22.04
+FROM ubuntu:18.04
 
 SHELL ["/bin/bash", "-c"]
 
 WORKDIR /accel-sim
 ADD . /accel-sim
 
-ENV CUDA_INSTALL_PATH /usr/local/cuda-11.7
-ENV PTXAS_CUDA_INSTALL_PATH /usr/local/cuda-11.7
+ENV CUDA_INSTALL_PATH /usr/local/cuda-11.0
+ENV PTXAS_CUDA_INSTALL_PATH /usr/local/cuda-11.0
 ENV GPUAPPS_ROOT /accel-sim/gpu-app-collection
 
 RUN apt-get update \
@@ -15,11 +15,10 @@ RUN apt-get update \
       libxml2-dev vim python-setuptools python3-pip cmake \
 && apt-get clean \
 && pip3 install pyyaml plotly psutil \
-&& wget https://developer.download.nvidia.com/compute/cuda/11.7.0/local_installers/cuda_11.7.0_515.43.04_linux.run \
-&& sh cuda_11.7.0_515.43.04_linux.run --silent --toolkit \
-&& rm cuda_11.7.0_515.43.04_linux.run \
-&& rm -rf /usr/local/cuda-11.7/nsight-compute-2022.2.0 \
-&& rm -rf /usr/local/cuda-11.7/nsight-systems-2022.1.3
+&& wget http://developer.download.nvidia.com/compute/cuda/11.0.2/local_installers/cuda_11.0.2_450.51.05_linux.run \
+&& sh cuda_11.0.2_450.51.05_linux.run --silent --toolkit \
+&& rm cuda_11.0.2_450.51.05_linux.run \
+&& rm -rf /usr/local/cuda-11.0/nsight-compute-2020.1.2 
 
 RUN export PATH=$CUDA_INSTALL_PATH/bin:$PATH \
 && git clone https://github.com/accel-sim/gpu-app-collection \
