@@ -15,6 +15,7 @@ env:
 
 jobs:
   push_to_registry:
+    if: github.repository == 'accel-sim/Dockerfile'
     name: Push Docker image to Docker Hub
     runs-on: ubuntu-latest
     steps:
