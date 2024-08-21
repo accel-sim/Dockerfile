@@ -9,6 +9,7 @@ ENV CUDA_INSTALL_PATH /usr/local/cuda-11.7
 ENV PTXAS_CUDA_INSTALL_PATH /usr/local/cuda-11.7
 ENV GPUAPPS_ROOT /accel-sim/gpu-app-collection
 
+# Setup GPGPU-Sim dependencies and CUDA 11.7
 RUN apt-get update \
 && apt-get install -y wget build-essential xutils-dev bison zlib1g-dev flex \
       libglu1-mesa-dev git g++ libssl-dev libxml2-dev libboost-all-dev git g++ \
@@ -21,11 +22,36 @@ RUN apt-get update \
 && rm -rf /usr/local/cuda-11.7/nsight-compute-2022.2.0 \
 && rm -rf /usr/local/cuda-11.7/nsight-systems-2022.1.3
 
+# Setup GPU app collection
 RUN export PATH=$CUDA_INSTALL_PATH/bin:$PATH \
 && git clone https://github.com/accel-sim/gpu-app-collection \
-&& source ./gpu-app-collection/src/setup_environment \
-&& make -j -C ./gpu-app-collection/src rodinia_2.0-ft \
-&& make -j -C ./gpu-app-collection/src GPU_Microbenchmark \
-&& make -j -C ./gpu-app-collection/src data \
+&& cd gpu-app-collection \
+&& git checkout sst_support \ 
+&& source ./src/setup_environment sst \
 && rm gpucomputingsdk_4.2.9_linux.run \
-&& rm -rf 4.2
+&& rm -rf 4.2 \
+&& cd ..
+
+# Build LLVM 18.1.8
+RUN git clone https://github.com/llvm/llvm-project.git \
+&& mkdir llvm-install \
+&& export LLVM_INSTALL_PATH=$(pwd)/llvm-install \
+&& cd llvm-project \
+&& git checkout llvmorg-18.1.8 \
+&& mkdir build && cd build \
+&& cmake -DLLVM_TARGETS_TO_BUILD="RISCV;X86;NVPTX" -DLLVM_DEFAULT_TARGET_TRIPLE=riscv64-unknown-linux-gnu \
+         -DCMAKE_BUILD_TYPE=Release -DLLVM_ENABLE_PROJECTS="clang;lld" -DCMAKE_INSTALL_PREFIX=$LLVM_INSTALL_PATH ../llvm \
+&& cmake --build . -j \
+&& cmake --build . --target install \
+&& cd .. && cd ..
+
+# Build RISCV GNU Toolchain 2024.08.06.nightly
+RUN git clone https://github.com/riscv-collab/riscv-gnu-toolchain.git \
+&& mkdir riscv-gnu-install \
+&& export RISCV_TOOLCHAIN_INSTALL_PATH=$(pwd)/riscv-gnu-install \
+&& cd riscv-gnu-toolchain \
+&& git checkout 2024.08.06 \
+&& ./configure --prefix=$RISCV_INSTALL_PATH \
+&& make linux -j \
+&& cd ..
+
