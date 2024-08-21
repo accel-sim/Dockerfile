@@ -22,16 +22,6 @@ RUN apt-get update \
 && rm -rf /usr/local/cuda-11.7/nsight-compute-2022.2.0 \
 && rm -rf /usr/local/cuda-11.7/nsight-systems-2022.1.3
 
-# Setup GPU app collection
-RUN export PATH=$CUDA_INSTALL_PATH/bin:$PATH \
-&& git clone https://github.com/accel-sim/gpu-app-collection \
-&& cd gpu-app-collection \
-&& git checkout sst_support \ 
-&& source ./src/setup_environment sst \
-&& rm gpucomputingsdk_4.2.9_linux.run \
-&& rm -rf 4.2 \
-&& cd ..
-
 # Build LLVM 18.1.8
 RUN git clone https://github.com/llvm/llvm-project.git \
 && mkdir llvm-install \
@@ -55,3 +45,12 @@ RUN git clone https://github.com/riscv-collab/riscv-gnu-toolchain.git \
 && make linux -j \
 && cd ..
 
+# Setup GPU app collection
+RUN export PATH=$CUDA_INSTALL_PATH/bin:$PATH \
+&& git clone https://github.com/accel-sim/gpu-app-collection \
+&& cd gpu-app-collection \
+&& git checkout sst_support \ 
+&& source ./src/setup_environment sst \
+&& rm gpucomputingsdk_4.2.9_linux.run \
+&& rm -rf 4.2 \
+&& cd ..
