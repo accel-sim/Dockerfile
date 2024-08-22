@@ -17,7 +17,7 @@ jobs:
   push_to_registry:
     if: github.repository == 'accel-sim/Dockerfile'
     name: Push Docker image to Docker Hub
-    runs-on: ubuntu-latest
+    runs-on: tgrogers-raid
     steps:
       - name: Check out the repo
         uses: actions/checkout@v4
