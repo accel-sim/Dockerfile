@@ -23,7 +23,7 @@ RUN git clone https://github.com/llvm/llvm-project.git \
 && cd .. && cd ..
 
 # Build RISCV GNU Toolchain 2024.08.06.nightly
-RUN apt-get install autoconf automake autotools-dev curl python3 python3-pip libmpc-dev libmpfr-dev libgmp-dev gawk build-essential bison flex texinfo gperf libtool patchutils bc zlib1g-dev libexpat-dev ninja-build git cmake libglib2.0-dev libslirp-dev
+RUN apt-get -y install autoconf automake autotools-dev curl python3 python3-pip libmpc-dev libmpfr-dev libgmp-dev gawk build-essential bison flex texinfo gperf libtool patchutils bc zlib1g-dev libexpat-dev ninja-build git cmake libglib2.0-dev libslirp-dev
 RUN git clone https://github.com/riscv-collab/riscv-gnu-toolchain.git \
 && mkdir riscv-gnu-install \
 && export RISCV_TOOLCHAIN_INSTALL_PATH=$(pwd)/riscv-gnu-install \
