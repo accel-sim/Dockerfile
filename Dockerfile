@@ -21,7 +21,8 @@ ENV RISCV_TOOLCHAIN_INSTALL_PATH /accel-sim/riscv-gnu-install
 #          -DCMAKE_BUILD_TYPE=Release -DLLVM_ENABLE_PROJECTS="clang;lld" -DCMAKE_INSTALL_PREFIX=$LLVM_INSTALL_PATH ../llvm \
 # && cmake --build . -j4 \
 # && cmake --build . --target install \
-# && cd .. && cd ..
+# && cd .. && cd .. \
+# && rm -rf llvm-project
 
 # Build RISCV GNU Toolchain 2024.08.06.nightly
 RUN apt-get update && apt-get -y install autoconf automake autotools-dev curl python3 python3-pip libmpc-dev libmpfr-dev libgmp-dev gawk build-essential bison flex texinfo gperf libtool patchutils bc zlib1g-dev libexpat-dev ninja-build git cmake libglib2.0-dev libslirp-dev
@@ -31,12 +32,13 @@ RUN git clone https://github.com/riscv-collab/riscv-gnu-toolchain.git \
 && git checkout 2024.08.06 \
 && ./configure --prefix=$RISCV_TOOLCHAIN_INSTALL_PATH \
 && make linux -j4 \
-&& cd ..
+&& cd .. \
+&& rm -rf riscv-gnu-toolchain
 
-# Setup GPU app collection
+# Setup GPU app collection in SST mode
 RUN export PATH=$CUDA_INSTALL_PATH/bin:$PATH \
-&& git clone https://github.com/accel-sim/gpu-app-collection \
 && cd gpu-app-collection \
+&& make clean -C ./src \
 && git checkout sst_support \ 
 && source ./src/setup_environment sst \
 && rm gpucomputingsdk_4.2.9_linux.run \
