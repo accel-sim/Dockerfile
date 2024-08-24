@@ -36,10 +36,8 @@ RUN git clone https://github.com/riscv-collab/riscv-gnu-toolchain.git \
 && rm -rf riscv-gnu-toolchain
 
 # Setup GPU app collection in SST mode
-RUN apt-get update && apt-get install python3 python2
 RUN export PATH=$CUDA_INSTALL_PATH/bin:$PATH \
 && cd gpu-app-collection \
-&& make clean -C ./src \
 && git checkout sst_support \ 
 && source ./src/setup_environment sst \
 && rm gpucomputingsdk_4.2.9_linux.run \
