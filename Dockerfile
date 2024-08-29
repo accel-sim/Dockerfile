@@ -36,6 +36,8 @@ RUN git clone https://github.com/riscv-collab/riscv-gnu-toolchain.git \
 && rm -rf riscv-gnu-toolchain
 
 # Setup GPU app collection in SST mode
+# Also remove prebuilt x86 binaries
+# Also remove all data except for rodinia-2.0
 RUN export PATH=$CUDA_INSTALL_PATH/bin:$PATH \
 && cd gpu-app-collection \
 && git pull \
@@ -43,4 +45,10 @@ RUN export PATH=$CUDA_INSTALL_PATH/bin:$PATH \
 && source ./src/setup_environment sst \
 && rm gpucomputingsdk_4.2.9_linux.run \
 && rm -rf 4.2 \
+&& rm -rf ./bin \
+&& mv ./data_dirs/cuda/rodinia/2.0-ft . \
+&& rm -rf ./data_dirs \
+&& mkdir -p ./data_dirs/cuda/rodinia/ \
+&& mv ./2.0-ft ./data_dirs/cuda/rodinia/ \
+&& ls ./data_dirs/cuda/rodinia/ \
 && cd ..
