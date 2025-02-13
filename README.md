@@ -1,13 +1,13 @@
 # Dockerfile for Accel-Sim
 
 This repo hosts the Dockerfiles used in regression tests for Accel-Sim and GPGPU-Sim. 
-The image can be pull from Docker Hub [tgrogers/accel-sim_regress](https://hub.docker.com/r/tgrogers/accel-sim_regress)
+The image can be pull from Docker Hub [accelsim/development](https://hub.docker.com/repository/docker/accelsim/development/general)
 ```
-docker pull tgrogers/accel-sim_regress:Ubuntu-22.04-cuda-11.7
+docker pull accelsim/development:cuda-12.8.0-ubuntu24.04 
 ```
 
 To run tests:
 ```
 # in accel-sim-framework
-docker run tgrogers/accel-sim_regress:Ubuntu-22.04-cuda-11.7 /bin/bash short-tests.sh
+docker run accelsim/development:cuda-12.8.0-ubuntu24.04 /bin/bash short-tests.sh
 ```
