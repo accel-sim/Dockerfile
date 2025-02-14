@@ -10,7 +10,7 @@ on:
 
 env:
   REGISTRY: ghcr.io
-  IMAGE_NAME: accel-sim
+  IMAGE_NAME: accel-sim/accel-sim-framework
 
 
 jobs:
