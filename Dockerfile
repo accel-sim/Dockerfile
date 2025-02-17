@@ -7,6 +7,7 @@ ADD . /accel-sim
 
 ENV CUDA_INSTALL_PATH=/usr/local/cuda
 ENV PTXAS_CUDA_INSTALL_PATH=/usr/local/cuda
+ENV BOOST_ROOT=/usr/include/boost
 #ENV GPUAPPS_ROOT /accel-sim/gpu-app-collection
 
 RUN apt-get update
