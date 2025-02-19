@@ -3,7 +3,6 @@ FROM nvidia/cuda:12.8.0-cudnn-devel-ubuntu24.04
 SHELL ["/bin/bash", "-c"]
 
 WORKDIR /accel-sim
-# ADD . /accel-sim
 
 ENV CUDA_INSTALL_PATH=/usr/local/cuda
 ENV PTXAS_CUDA_INSTALL_PATH=/usr/local/cuda
