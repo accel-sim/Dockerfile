@@ -21,7 +21,7 @@ RUN apt-get update && apt-get install -y wget build-essential xutils-dev bison z
 # Create and activate a virtual environment, venv is needed because of PEP 668
 RUN python3 -m venv /venv
 ENV PATH="/venv/bin:$PATH"
-# RUN pip3 install --upgrade pip
+RUN pip3 install --upgrade pip
 RUN pip3 install pyyaml plotly psutil
 
 RUN git clone --recurse-submodules https://github.com/accel-sim/gpu-app-collection.git && cd gpu-app-collection && bash test-build.sh && bash get_regression_data.sh
