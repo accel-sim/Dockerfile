@@ -1,4 +1,6 @@
 FROM nvidia/cuda:12.8.0-cudnn-devel-ubuntu24.04
+LABEL org.opencontainers.image.source=https://github.com/accel-sim/Dockerfile/
+LABEL org.opencontainers.image.description="Accel-Sim container with Ubuntu 24.04 with CUDA 12.8.0 and CUDNN 8.9.0, for CI runs only"
 
 SHELL ["/bin/bash", "-c"]
 
@@ -24,14 +26,5 @@ ENV PATH="/venv/bin:$PATH"
 RUN pip3 install --upgrade pip
 RUN pip3 install pyyaml plotly psutil
 
-RUN git clone --recurse-submodules https://github.com/accel-sim/gpu-app-collection.git && cd gpu-app-collection && bash test-build.sh && bash get_regression_data.sh
-
-#get Nsys
-ENV DEBIAN_FRONTEND=noninteractive
-
-RUN apt update --allow-insecure-repositories && apt update && apt install -y --no-install-recommends gnupg wget \
-    && mkdir -p /etc/apt/keyrings 
-RUN wget -qO - https://developer.download.nvidia.com/devtools/repos/ubuntu2404/amd64/7fa2af80.pub | tee /etc/apt/keyrings/nvidia.asc
-RUN echo "deb [signed-by=/etc/apt/keyrings/nvidia.asc] http://developer.download.nvidia.com/devtools/repos/ubuntu2404/amd64 /" | tee /etc/apt/sources.list.d/nvidia.list
-RUN apt-get update --allow-insecure-repositories
-RUN apt install  -y nsight-systems-cli --allow-unauthenticated
+# Clone the gpu-app-collection repository
+RUN git clone --recurse-submodules https://github.com/accel-sim/gpu-app-collection.git
