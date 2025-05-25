@@ -13,6 +13,7 @@ ENV PATH=$CUDA_INSTALL_PATH/bin:$PATH
 
 ENV GPUAPPS_ROOT=/accel-sim/gpu-app-collection
 
+ENV DEBIAN_FRONTEND=noninteractive
 RUN apt-get update && apt-get install -y wget build-essential xutils-dev bison zlib1g-dev flex \
       libglu1-mesa-dev git g++ libssl-dev libxml2-dev libboost-all-dev git g++ \
       libxml2-dev vim python3-setuptools python3-pip python3-venv cmake \
