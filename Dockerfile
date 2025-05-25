@@ -1,6 +1,6 @@
 FROM nvidia/cuda:12.8.0-cudnn-devel-ubuntu24.04
 LABEL org.opencontainers.image.source=https://github.com/accel-sim/Dockerfile/
-LABEL org.opencontainers.image.description="Accel-Sim container with Ubuntu 24.04 with CUDA 12.8.0 and CUDNN 8.9.0, for CI runs only"
+LABEL org.opencontainers.image.description="Accel-Sim container with Ubuntu 24.04 with CUDA 12.8.0 and CUDNN, for CI runs only"
 
 SHELL ["/bin/bash", "-c"]
 
@@ -29,8 +29,5 @@ RUN pip3 install pyyaml plotly psutil
 # For CI, only build the CI apps and pull the regression data
 # Clone the gpu-app-collection repository
 RUN git clone --recurse-submodules https://github.com/accel-sim/gpu-app-collection.git
-RUN cd gpu-app-collection
-# Build CI apps
-RUN bash test-build.sh ci
-# Pull regression data
-RUN bash get_regression_data.sh
+# Build the CI apps and pull the regression data
+RUN cd gpu-app-collection && bash test-build.sh ci && bash get_regression_data.sh
