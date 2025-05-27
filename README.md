@@ -11,3 +11,9 @@ To run tests:
 # in accel-sim-framework
 docker run accelsim/development:cuda-12.8.0-ubuntu24.04 /bin/bash short-tests.sh
 ```
+To start conianer for devlopment:
+
+```
+# in accel-sim-framework
+docker run --name <container name >  --runtime=nvidia  --gpus all -it ghcr.io/accel-sim/accel-sim-framework:ubuntu-24.04-cuda-12.8 /bin/bash
+```
