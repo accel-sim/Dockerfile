@@ -15,5 +15,5 @@ To start conianer for devlopment:
 
 ```
 # in accel-sim-framework
-docker run --name <container name >  --runtime=nvidia  --gpus all -it ghcr.io/accel-sim/accel-sim-framework:ubuntu-24.04-cuda-12.8 /bin/bash
+docker run --name <container name >  --runtime=nvidia  --gpus all -it ghcr.io/accel-sim/accel-sim-framework:ubuntu-24.04-cuda-12.8 /bin/bash 
 ```
