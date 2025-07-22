@@ -34,7 +34,7 @@ RUN echo "source /usr/share/bash-completion/completions/git" >> ~/.bashrc
 
 # Install fzf
 RUN git clone --depth 1 https://github.com/junegunn/fzf.git ~/.fzf && \
-    ~/.fzf/install --all --no-update-rc
+    ~/.fzf/install --all
 
 #get Nsys
 ENV DEBIAN_FRONTEND=noninteractive
