@@ -11,19 +11,19 @@ Follow the installation guide here: [NVIDIA Container Toolkit Install Guide](htt
 
 ## Pull the image
 ```bash
-docker pull ghcr.io/accel-sim/accel-sim-framework:ubuntu-24.04-cuda-12.8
+docker pull ghcr.io/accel-sim/accel-sim-framework:ubuntu-24.04-cuda-12.9
 ```
 
 ## Run regression tests
 From inside `accel-sim-framework`:
 ```bash
-docker run ghcr.io/accel-sim/accel-sim-framework:ubuntu-24.04-cuda-12.8 /bin/bash short-tests.sh
+docker run ghcr.io/accel-sim/accel-sim-framework:ubuntu-24.04-cuda-12.9 /bin/bash short-tests.sh
 ```
 
 ## Start a container for development
 ```bash
 docker run --name <container_name> --runtime=nvidia --gpus all -it \
-  ghcr.io/accel-sim/accel-sim-framework:ubuntu-24.04-cuda-12.8 /bin/bash
+  ghcr.io/accel-sim/accel-sim-framework:ubuntu-24.04-cuda-12.9 /bin/bash
 ```
 
 ## Build the image locally
