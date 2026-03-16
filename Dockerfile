@@ -1,6 +1,6 @@
-FROM nvidia/cuda:12.9.1-cudnn-devel-ubuntu24.04
+FROM nvidia/cuda:13.1.1-cudnn-devel-ubuntu24.04
 LABEL org.opencontainers.image.source=https://github.com/accel-sim/Dockerfile/
-LABEL org.opencontainers.image.description="Accel-Sim container with Ubuntu 24.04 with CUDA 12.8.0 and CUDNN, for CI runs only"
+LABEL org.opencontainers.image.description="Accel-Sim container with Ubuntu 24.04 with CUDA 13.1.1 and CUDNN, for CI runs only"
 
 SHELL ["/bin/bash", "-c"]
 
