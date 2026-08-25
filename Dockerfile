@@ -31,16 +31,6 @@ ENV PATH="/venv/bin:$PATH"
 RUN pip3 install --upgrade pip
 RUN pip3 install pyyaml plotly psutil
 
-RUN git clone --recurse-submodules https://github.com/accel-sim/gpu-app-collection.git && cd gpu-app-collection && bash test-build.sh && bash get_regression_data.sh
-
-
-#  autocomplete
-RUN echo "source /usr/share/bash-completion/completions/git" >> ~/.bashrc
-
-# Install fzf
-RUN git clone --depth 1 https://github.com/junegunn/fzf.git ~/.fzf && \
-    ~/.fzf/install --all
-
 #get Nsys
 ENV DEBIAN_FRONTEND=noninteractive
 
