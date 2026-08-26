@@ -17,7 +17,8 @@ RUN apt-get update && apt-get install -y wget build-essential xutils-dev bison z
       libglu1-mesa-dev git g++ libssl-dev libxml2-dev libboost-all-dev git g++ \
       libxml2-dev vim python3-setuptools python3-pip python3-venv cmake \
       libfreeimage3 libfreeimage-dev freeglut3-dev pkg-config \
-      python3-doc python3-tk binfmt-support psmisc apt-utils && apt-get clean 
+      python3-doc python3-tk binfmt-support psmisc apt-utils \
+      libzstd-dev && apt-get clean
 
 
 # Create and activate a virtual environment, venv is needed because of PEP 668
