@@ -31,4 +31,9 @@ RUN pip3 install pyyaml plotly psutil
 # Clone the gpu-app-collection repository
 RUN git clone --recurse-submodules https://github.com/accel-sim/gpu-app-collection.git
 # Build the CI apps and pull the regression data
-RUN cd gpu-app-collection && bash test-build.sh ci && bash get_regression_data.sh
+# Invoke make directly instead of test-build.sh, which hardcodes a serial
+# `make -C src/ ci`. src/setup_environment is still required: it exports
+# BINDIR/BINSUBDIR/SETENV and the per-CUDA-version gencode flags the
+# suite makefiles read. -j32 propagates to every recursive $(MAKE),
+# including cutlass_mini's cmake-generated makefiles.
+RUN cd gpu-app-collection && source ./src/setup_environment && make -j32 -C src/ ci && bash get_regression_data.sh
