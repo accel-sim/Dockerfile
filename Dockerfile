@@ -37,3 +37,10 @@ RUN git clone --recurse-submodules https://github.com/accel-sim/gpu-app-collecti
 # suite makefiles read. -j32 propagates to every recursive $(MAKE),
 # including cutlass_mini's cmake-generated makefiles.
 RUN cd gpu-app-collection && source ./src/setup_environment && make -j32 -C src/ ci && bash get_regression_data.sh
+
+# AWS CLI v2 and boto3, so this image can run as an AWS Batch job (accel-sim-framework util/aws_batch)
+RUN apt-get update && apt-get install -y --no-install-recommends unzip && apt-get clean && \
+    wget -qO /tmp/awscliv2.zip https://awscli.amazonaws.com/awscli-exe-linux-x86_64-2.39.2.zip && \
+    unzip -q /tmp/awscliv2.zip -d /tmp && /tmp/aws/install && rm -rf /tmp/aws /tmp/awscliv2.zip && \
+    aws --version
+RUN pip3 install boto3==1.43.122

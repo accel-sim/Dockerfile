@@ -17,30 +17,44 @@ env:
 jobs:
   push_to_registry:
     if: github.repository == 'accel-sim/Dockerfile'
-    name: Push Docker image to Docker Hub
-    runs-on: tgrogers-pc01
+    name: Build on tgrogers-pc02 and push to ghcr.io
+    # tgrogers-raid has no docker (only apptainer), so the runner ships the context to a docker host over ssh.
+    runs-on: tgrogers-raid
+    permissions:
+      contents: read
+      packages: write
+    env:
+      BUILD_HOST: tgrogers-pc02
     steps:
       - name: Check out the repo
         uses: actions/checkout@v4
-      
-      - name: Log in to the Container registry
-        uses: docker/login-action@65b78e6e13532edd9afa3aa52ac7964289d1a9c1
-        with:
-          registry: ${{ env.REGISTRY }}
-          username: ${{ github.actor }}
-          password: ${{ secrets.GITHUB_TOKEN }}
-      
+
       - name: Extract metadata (tags, labels) for Docker
         id: meta
         uses: docker/metadata-action@9ec57ed1fcdbf14dcef7dfbe97b2010124a938b7
         with:
           images: ${{ env.REGISTRY }}/${{ env.IMAGE_NAME }}
-      
-      - name: Build and push Docker image
-        uses: docker/build-push-action@3b5e8027fcad23fda98b2e3ac259d8d67585f671
-        with:
-          context: .
-          file: ./Dockerfile
-          push: true
-          tags: ${{ steps.meta.outputs.tags }}
-          labels: ${{ steps.meta.outputs.labels }}
+
+      - name: Build and push on the build host
+        env:
+          TAGS: ${{ steps.meta.outputs.tags }}
+          LABELS: ${{ steps.meta.outputs.labels }}
+          GHCR_USER: ${{ github.actor }}
+          GHCR_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: |
+          set -euo pipefail
+          D=/tmp/docker-build-${GITHUB_RUN_ID}-${GITHUB_RUN_ATTEMPT}
+          ssh_b() { ssh -o BatchMode=yes -o ConnectTimeout=20 -o ServerAliveInterval=60 \
+                        -o StrictHostKeyChecking=accept-new "$BUILD_HOST" "$@"; }
+          trap 'ssh_b "rm -rf $D"' EXIT
+          # A private DOCKER_CONFIG per run keeps the ghcr login off the build host's account.
+          tar -cz --exclude=.git . | ssh_b "mkdir -p $D/ctx $D/docker && tar -xz -C $D/ctx"
+          echo "$GHCR_TOKEN" | ssh_b "DOCKER_CONFIG=$D/docker docker login ghcr.io -u $GHCR_USER --password-stdin"
+          args=()
+          while IFS= read -r t; do [ -n "$t" ] && args+=(-t "$t"); done <<< "$TAGS"
+          while IFS= read -r l; do [ -n "$l" ] && args+=(--label "$l"); done <<< "$LABELS"
+          [ ${#args[@]} -gt 0 ] || { echo "metadata-action produced no tags"; exit 1; }
+          ssh_b "cd $D/ctx && DOCKER_CONFIG=$D/docker docker build $(printf '%q ' "${args[@]}") -f Dockerfile ."
+          while IFS= read -r t; do
+            [ -n "$t" ] && ssh_b "DOCKER_CONFIG=$D/docker docker push $(printf '%q' "$t")"
+          done <<< "$TAGS"
